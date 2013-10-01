@@ -1952,7 +1952,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
         CGPoint touchPoint = [panGesture locationOfTouch:0 inView:self];
         NSLog(@"Touch Point %@", NSStringFromCGPoint(touchPoint));
 #warning This if statement is Skillz Specific. iCarousel is ignored if drag is at the very edge, assuming the edge drag is to open the panel menu. Change when Landscape added.
-        if (touchPoint.x < 280) {
+        
+        if (touchPoint.x < self.superview.bounds.size.width - 40) {
             CGPoint translation = [panGesture translationInView:self];
             if (_ignorePerpendicularSwipes)
             {
