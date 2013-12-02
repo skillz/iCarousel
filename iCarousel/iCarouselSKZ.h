@@ -97,12 +97,12 @@ typedef enum
 iCarouselOption;
 
 
-@protocol iCarouselDataSource, iCarouselDelegate;
+@protocol iCarouselDataSourceSKZ, iCarouselDelegateSKZ;
 
-@interface iCarousel : UIView
+@interface iCarouselSKZ : UIView
 
-@property (nonatomic, weak_delegate) IBOutlet id<iCarouselDataSource> dataSource;
-@property (nonatomic, weak_delegate) IBOutlet id<iCarouselDelegate> delegate;
+@property (nonatomic, weak_delegate) IBOutlet id<iCarouselDataSourceSKZ> dataSource;
+@property (nonatomic, weak_delegate) IBOutlet id<iCarouselDelegateSKZ> delegate;
 @property (nonatomic, assign) iCarouselType type;
 @property (nonatomic, assign) CGFloat perspective;
 @property (nonatomic, assign) CGFloat decelerationRate;
@@ -155,36 +155,36 @@ iCarouselOption;
 @end
 
 
-@protocol iCarouselDataSource <NSObject>
+@protocol iCarouselDataSourceSKZ <NSObject>
 
-- (NSUInteger)numberOfItemsInCarousel:(iCarousel *)carousel;
-- (UIView *)carousel:(iCarousel *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view;
+- (NSUInteger)numberOfItemsInCarousel:(iCarouselSKZ *)carousel;
+- (UIView *)carousel:(iCarouselSKZ *)carousel viewForItemAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 
 @optional
 
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel;
-- (UIView *)carousel:(iCarousel *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view;
+- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarouselSKZ *)carousel;
+- (UIView *)carousel:(iCarouselSKZ *)carousel placeholderViewAtIndex:(NSUInteger)index reusingView:(UIView *)view;
 
 @end
 
 
-@protocol iCarouselDelegate <NSObject>
+@protocol iCarouselDelegateSKZ <NSObject>
 @optional
 
-- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel;
-- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel;
-- (void)carouselDidScroll:(iCarousel *)carousel;
-- (void)carouselCurrentItemIndexDidChange:(iCarousel *)carousel;
-- (void)carouselWillBeginDragging:(iCarousel *)carousel;
-- (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate;
-- (void)carouselWillBeginDecelerating:(iCarousel *)carousel;
-- (void)carouselDidEndDecelerating:(iCarousel *)carousel;
+- (void)carouselWillBeginScrollingAnimation:(iCarouselSKZ *)carousel;
+- (void)carouselDidEndScrollingAnimation:(iCarouselSKZ *)carousel;
+- (void)carouselDidScroll:(iCarouselSKZ *)carousel;
+- (void)carouselCurrentItemIndexDidChange:(iCarouselSKZ *)carousel;
+- (void)carouselWillBeginDragging:(iCarouselSKZ *)carousel;
+- (void)carouselDidEndDragging:(iCarouselSKZ *)carousel willDecelerate:(BOOL)decelerate;
+- (void)carouselWillBeginDecelerating:(iCarouselSKZ *)carousel;
+- (void)carouselDidEndDecelerating:(iCarouselSKZ *)carousel;
 
-- (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index;
-- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index;
+- (BOOL)carousel:(iCarouselSKZ *)carousel shouldSelectItemAtIndex:(NSInteger)index;
+- (void)carousel:(iCarouselSKZ *)carousel didSelectItemAtIndex:(NSInteger)index;
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel;
-- (CATransform3D)carousel:(iCarousel *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
-- (CGFloat)carousel:(iCarousel *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
+- (CGFloat)carouselItemWidth:(iCarouselSKZ *)carousel;
+- (CATransform3D)carousel:(iCarouselSKZ *)carousel itemTransformForOffset:(CGFloat)offset baseTransform:(CATransform3D)transform;
+- (CGFloat)carousel:(iCarouselSKZ *)carousel valueForOption:(iCarouselOption)option withDefault:(CGFloat)value;
 
 @end

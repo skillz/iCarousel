@@ -30,7 +30,7 @@
 //  3. This notice may not be removed or altered from any source distribution.
 //
 
-#import "iCarousel.h"
+#import "iCarouselSKZ.h"
 #import <objc/message.h>
 
 
@@ -59,32 +59,32 @@
 
 @implementation NSObject (iCarousel)
 
-- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarousel *)carousel { return 0; }
-- (void)carouselWillBeginScrollingAnimation:(iCarousel *)carousel {}
-- (void)carouselDidEndScrollingAnimation:(iCarousel *)carousel {}
-- (void)carouselDidScroll:(iCarousel *)carousel {}
+- (NSUInteger)numberOfPlaceholdersInCarousel:(iCarouselSKZ *)carousel { return 0; }
+- (void)carouselWillBeginScrollingAnimation:(iCarouselSKZ *)carousel {}
+- (void)carouselDidEndScrollingAnimation:(iCarouselSKZ *)carousel {}
+- (void)carouselDidScroll:(iCarouselSKZ *)carousel {}
 
-- (void)carouselCurrentItemIndexDidChange:(iCarousel *)carousel {}
-- (void)carouselWillBeginDragging:(iCarousel *)carousel {}
-- (void)carouselDidEndDragging:(iCarousel *)carousel willDecelerate:(BOOL)decelerate {}
-- (void)carouselWillBeginDecelerating:(iCarousel *)carousel {}
-- (void)carouselDidEndDecelerating:(iCarousel *)carousel {}
+- (void)carouselCurrentItemIndexDidChange:(iCarouselSKZ *)carousel {}
+- (void)carouselWillBeginDragging:(iCarouselSKZ *)carousel {}
+- (void)carouselDidEndDragging:(iCarouselSKZ *)carousel willDecelerate:(BOOL)decelerate {}
+- (void)carouselWillBeginDecelerating:(iCarouselSKZ *)carousel {}
+- (void)carouselDidEndDecelerating:(iCarouselSKZ *)carousel {}
 
-- (BOOL)carousel:(iCarousel *)carousel shouldSelectItemAtIndex:(NSInteger)index { return YES; }
-- (void)carousel:(iCarousel *)carousel didSelectItemAtIndex:(NSInteger)index {}
+- (BOOL)carousel:(iCarouselSKZ *)carousel shouldSelectItemAtIndex:(NSInteger)index { return YES; }
+- (void)carousel:(iCarouselSKZ *)carousel didSelectItemAtIndex:(NSInteger)index {}
 
-- (CGFloat)carouselItemWidth:(iCarousel *)carousel { return 0; }
-- (CATransform3D)carousel:(iCarousel *)carousel
+- (CGFloat)carouselItemWidth:(iCarouselSKZ *)carousel { return 0; }
+- (CATransform3D)carousel:(iCarouselSKZ *)carousel
    itemTransformForOffset:(CGFloat)offset
             baseTransform:(CATransform3D)transform { return transform; }
-- (CGFloat)carousel:(iCarousel *)carousel
+- (CGFloat)carousel:(iCarouselSKZ *)carousel
      valueForOption:(iCarouselOption)option
         withDefault:(CGFloat)value { return value; }
 
 @end
 
 
-@interface iCarousel ()
+@interface iCarouselSKZ ()
 
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) NSMutableDictionary *itemViews;
@@ -109,12 +109,12 @@
 @property (nonatomic, assign) BOOL didDrag;
 @property (nonatomic, assign) NSTimeInterval toggleTime;
 
-NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self);
+NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *self);
 
 @end
 
 
-@implementation iCarousel
+@implementation iCarouselSKZ
 
 #pragma mark -
 #pragma mark Initialisation
@@ -200,7 +200,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     [self stopAnimation];
 }
 
-- (void)setDataSource:(id<iCarouselDataSource>)dataSource
+- (void)setDataSource:(id<iCarouselDataSourceSKZ>)dataSource
 {
     if (_dataSource != dataSource)
     {
@@ -212,7 +212,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
 }
 
-- (void)setDelegate:(id<iCarouselDelegate>)delegate
+- (void)setDelegate:(id<iCarouselDelegateSKZ>)delegate
 {
     if (_delegate != delegate)
     {
@@ -644,7 +644,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
     }
 }
 
-NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *self)
+NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *self)
 {
     //compare depths
     CATransform3D t1 = view1.superview.layer.transform;
