@@ -137,11 +137,14 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
     
     _contentView = [[UIView alloc] initWithFrame:self.bounds];
     
+    
 #ifdef ICAROUSEL_IOS
-        
+    
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
     panGesture.delegate = (id <UIGestureRecognizerDelegate>)self;
     [_contentView addGestureRecognizer:panGesture];
+    [panGesture setCancelsTouchesInView:YES];
+    [panGesture setDelaysTouchesBegan:YES];
     
 #else
     
@@ -160,11 +163,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
 #ifndef USING_CHAMELEON
 
 - (id)initWithCoder:(NSCoder *)aDecoder
-{   
+{
     if ((self = [super initWithCoder:aDecoder]))
     {
         [self setUp];
-        [self didMoveToSuperview]; 
+        [self didMoveToSuperview];
     }
     return self;
 }
@@ -196,7 +199,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
 #endif
 
 - (void)dealloc
-{   
+{
     [self stopAnimation];
 }
 
@@ -418,7 +421,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
     fadeMax = [self valueForOption:iCarouselOptionFadeMax withDefault:fadeMax];
     fadeRange = [self valueForOption:iCarouselOptionFadeRange withDefault:fadeRange];
     fadeMinAlpha = [self valueForOption:iCarouselOptionFadeMinAlpha withDefault:fadeMinAlpha];
-
+    
 #ifdef ICAROUSEL_MACOS
     
     if (_vertical)
@@ -442,17 +445,17 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
 }
 
 - (CGFloat)valueForOption:(iCarouselOption)option withDefault:(CGFloat)value
-{    
+{
     return [_delegate carousel:self valueForOption:option withDefault:value];
 }
 
 - (CATransform3D)transformForItemView:(UIView *)view withOffset:(CGFloat)offset
-{   
+{
     //set up base transform
     CATransform3D transform = CATransform3DIdentity;
     transform.m34 = _perspective;
     transform = CATransform3DTranslate(transform, -_viewpointOffset.width, -_viewpointOffset.height, 0.0f);
-
+    
     //perform transform
     switch (_type)
     {
@@ -759,7 +762,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
     
     //clipping works differently on Mac OS
     [containerView setBoundsSize:view.frame.size];
-
+    
 #endif
     
     //set view frame
@@ -776,7 +779,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
 {
     //calculate offset
     CGFloat offset = [self offsetForItemAtIndex:index];
-
+    
 #ifdef ICAROUSEL_IOS
     
     //center view
@@ -964,7 +967,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
     _numberOfVisibleItems = MIN(MAX_VISIBLE_ITEMS, _numberOfVisibleItems);
     _numberOfVisibleItems = [self valueForOption:iCarouselOptionVisibleItems withDefault:_numberOfVisibleItems];
     _numberOfVisibleItems = MAX(0, MIN(_numberOfVisibleItems, _numberOfItems + _numberOfPlaceholdersToShow));
-
+    
 }
 
 - (NSInteger)circularCarouselItemCount
@@ -1003,7 +1006,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
     {
         return;
     }
-
+    
     //update wrap
     switch (_type)
     {
@@ -1053,7 +1056,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
         }
     }
     _offsetMultiplier = [self valueForOption:iCarouselOptionOffsetMultiplier withDefault:_offsetMultiplier];
-
+    
     //align
     if (!_scrolling && !_decelerating)
     {
@@ -1258,7 +1261,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
 }
 
 - (void)reloadData
-{    
+{
     //remove old views
     for (UIView *view in [_itemViews allValues])
     {
@@ -1275,7 +1278,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
     _numberOfVisibleItems = 0;
     _numberOfItems = [_dataSource numberOfItemsInCarousel:self];
     _numberOfPlaceholders = [_dataSource numberOfPlaceholdersInCarousel:self];
-
+    
     //reset view pools
     self.itemViews = [NSMutableDictionary dictionary];
     self.itemViewPool = [NSMutableSet set];
@@ -1320,7 +1323,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
 }
 
 - (NSInteger)currentItemIndex
-{   
+{
     return [self clampedIndex:roundf(_scrollOffset)];
 }
 
@@ -1414,7 +1417,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
 }
 
 - (void)scrollToItemAtIndex:(NSInteger)index animated:(BOOL)animated
-{   
+{
     [self scrollToItemAtIndex:index duration:animated? SCROLL_DURATION: 0];
 }
 
@@ -1455,7 +1458,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
         [CATransaction setAnimationDuration:0.1];
         [CATransaction setCompletionBlock:^{
             [self queueItemView:itemView];
-            [itemView.superview removeFromSuperview]; 
+            [itemView.superview removeFromSuperview];
         }];
         itemView.superview.layer.opacity = 0.0f;
         [CATransaction commit];
@@ -1463,7 +1466,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
         [CATransaction begin];
         [CATransaction setAnimationDuration:INSERT_DURATION];
         [CATransaction setCompletionBlock:^{
-            [self depthSortViews]; 
+            [self depthSortViews];
         }];
         [self removeViewAtIndex:index];
         _numberOfItems --;
@@ -1547,7 +1550,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
         [CATransaction begin];
         [CATransaction setAnimationDuration:INSERT_DURATION];
         [CATransaction setCompletionBlock:^{
-            [self loadUnloadViews]; 
+            [self loadUnloadViews];
         }];
         [self transformItemViews];
         [CATransaction commit];
@@ -1559,9 +1562,9 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
     else
     {
         [self pushAnimationState:NO];
-        [self transformItemViews]; 
+        [self transformItemViews];
         [self popAnimationState];
-        itemView.superview.layer.opacity = 1.0f; 
+        itemView.superview.layer.opacity = 1.0f;
     }
     
     if (_scrollOffset < 0.0f)
@@ -1605,11 +1608,11 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
                                             repeats:YES];
         
         [[NSRunLoop mainRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
-
+        
 #ifdef ICAROUSEL_IOS
         
         [[NSRunLoop mainRunLoop] addTimer:_timer forMode:UITrackingRunLoopMode];
-
+        
 #endif
         
     }
@@ -1680,7 +1683,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
     distance = _endOffset - _startOffset;
     
     _startTime = CACurrentMediaTime();
-    _scrollDuration = fabsf(distance) / fabsf(0.5f * _startVelocity);   
+    _scrollDuration = fabsf(distance) / fabsf(0.5f * _startVelocity);
     
     if (distance != 0.0f)
     {
@@ -1837,7 +1840,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
         [self startAnimation];
     }
     
-    [self loadUnloadViews];    
+    [self loadUnloadViews];
     [self transformItemViews];
     
     [self pushAnimationState:YES];
@@ -1851,10 +1854,10 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
         [_delegate carouselCurrentItemIndexDidChange:self];
         [self popAnimationState];
     }
-
+    
     //update previous index
     _previousItemIndex = currentIndex;
-} 
+}
 
 
 #ifdef ICAROUSEL_IOS
@@ -1943,19 +1946,29 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
 {
     if ([gesture isKindOfClass:[UIPanGestureRecognizer class]])
     {
+        
         //ignore vertical swipes
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
-        CGPoint translation = [panGesture translationInView:self];
-        if (_ignorePerpendicularSwipes)
-        {
-            if (_vertical)
+        CGPoint touchPoint = [panGesture locationOfTouch:0 inView:self];
+        NSLog(@"Touch Point %@", NSStringFromCGPoint(touchPoint));
+#warning This if statement is Skillz Specific. iCarousel is ignored if drag is at the very edge, assuming the edge drag is to open the panel menu. Change when Landscape added.
+        
+        if (touchPoint.x < self.superview.bounds.size.width - 40) {
+            CGPoint translation = [panGesture translationInView:self];
+            if (_ignorePerpendicularSwipes)
             {
-                return fabsf(translation.x) <= fabsf(translation.y);
+                if (_vertical)
+                {
+                    return fabsf(translation.x) <= fabsf(translation.y);
+                }
+                else
+                {
+                    return fabsf(translation.x) >= fabsf(translation.y);
+                }
             }
-            else
-            {
-                return fabsf(translation.x) >= fabsf(translation.y);
-            }
+            
+        } else {
+            return NO;
         }
     }
     return YES;
@@ -2128,7 +2141,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
         [self pushAnimationState:YES];
         [_delegate carouselDidEndDragging:self willDecelerate:_decelerating];
         [self popAnimationState];
-
+        
         if (!_decelerating)
         {
             if ([self shouldScroll])
