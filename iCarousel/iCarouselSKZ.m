@@ -1950,7 +1950,7 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarouselSKZ *
         //ignore vertical swipes
         UIPanGestureRecognizer *panGesture = (UIPanGestureRecognizer *)gesture;
         CGPoint touchPoint = [panGesture locationOfTouch:0 inView:self];
-        NSLog(@"Touch Point %@", NSStringFromCGPoint(touchPoint));
+        SKZLog(@"Touch Point %@", NSStringFromCGPoint(touchPoint));
 #warning This if statement is Skillz Specific. iCarousel is ignored if drag is at the very edge, assuming the edge drag is to open the panel menu. Change when Landscape added.
         
         if (touchPoint.x < self.superview.bounds.size.width - 40) {
